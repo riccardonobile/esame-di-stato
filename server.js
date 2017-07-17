@@ -35,7 +35,7 @@ app.use(function(req, res){
     res.send({
         path: req.path,
         method: req.method,
-        error: 'API doesen\' exists'
+        error: 'API doesn\'t exists'
     });
 });
 
