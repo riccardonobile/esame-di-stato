@@ -36,8 +36,6 @@ mysql.createPool(dbConfig);
 let routes = require('./app/routes');
 let router = routes(express.Router());
 
-app.use(express.static(__dirname + '/public'));
-
 app.use('/api/v1', morgan('combined'), router);
 
 app.use(function(req, res){
