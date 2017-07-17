@@ -57,3 +57,10 @@ typings/
 # dotenv environment variables file
 .env
 
+# WebStorm files
+.idea/
+
+# Config files
+config.cors.js
+config.db.js
+config.express.js
