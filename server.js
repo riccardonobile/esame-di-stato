@@ -30,6 +30,15 @@ app.use(bodyParser.json());
 app.use(cors(corsConfig));
 app.set('trust proxy', true);
 
+app.use(function(req, res){
+    res.status(404);
+    res.send({
+        path: req.path,
+        method: req.method,
+        error: 'API doesen\' exists'
+    });
+});
+
 let mysql = require('./app/services/service.mysql');
 mysql.createPool(dbConfig);
 
