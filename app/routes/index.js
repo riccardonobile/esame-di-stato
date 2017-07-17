@@ -1,10 +1,10 @@
 'use strict';
 
-let xController = require('../controllers/x');
+let raceController = require('../controllers/controller.times');
 
 module.exports = function(router) {
-    // router.get('/measurements', measurementsController.getAll);
-    // router.post('/measurements/:stationId', measurementsController.insert);
+    router.get('/tempo', raceController.getAll);
+    router.post('/tempo/:raceId', raceController.insert);
 
     return router;
 };

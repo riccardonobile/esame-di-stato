@@ -12,13 +12,22 @@ let dbConfig = require('./app/configs/config.db'),
 
 let app = express();
 
-app.use(expressValidator());
+app.use(expressValidator({
+    customValidators: {
+        isBetween: function(value, limits) {
+            let min = limits.min;
+            let max = limits.max;
+
+            return value >= min && value <= max;
+        }
+    }
+}));
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
 app.use(cors(corsConfig));
-app.use(morgan('combined'));
 app.set('trust proxy', true);
 
 let mysql = require('./app/services/service.mysql');
@@ -27,6 +36,8 @@ mysql.createPool(dbConfig);
 let routes = require('./app/routes');
 let router = routes(express.Router());
 
-app.use('/api/v1', router);
+app.use(express.static(__dirname + '/public'));
+
+app.use('/api/v1', morgan('combined'), router);
 
 app.listen(expressConfig.port, expressConfig.bindAddress);
