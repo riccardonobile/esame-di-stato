@@ -14,14 +14,14 @@ const schema = {
         in: 'body',
         notEmpty: true,
         isInt: {
-            errorMessage: 'Must be int'
+            errorMessage: 'Must be int or out of range'
         },
         isBetween: {
             options: [{
                 min: 1,
                 max: 150
             }],
-            errorMessage: 'Out of range'
+            errorMessage: 'Must be int or out of range'
         }
     },
     'time': {

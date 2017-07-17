@@ -30,15 +30,6 @@ app.use(bodyParser.json());
 app.use(cors(corsConfig));
 app.set('trust proxy', true);
 
-app.use(function(req, res){
-    res.status(404);
-    res.send({
-        path: req.path,
-        method: req.method,
-        error: 'API doesn\'t exists'
-    });
-});
-
 let mysql = require('./app/services/service.mysql');
 mysql.createPool(dbConfig);
 
@@ -48,5 +39,14 @@ let router = routes(express.Router());
 app.use(express.static(__dirname + '/public'));
 
 app.use('/api/v1', morgan('combined'), router);
+
+app.use(function(req, res){
+    res.status(404);
+    res.send({
+        path: req.path,
+        method: req.method,
+        error: 'API doesn\'t exists'
+    });
+});
 
 app.listen(expressConfig.port, expressConfig.bindAddress);
