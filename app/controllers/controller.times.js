@@ -62,6 +62,46 @@ let insert = function(req, res) {
                 errors: errors
             });
         } else {
+            let raceId = req.params.raceId,
+                runnerId = req.body.id,
+                time= req.body.time;
+
+            unirest.get(checkUrl + '/' + runnerId).send().end(function (response) {
+                if(response.statusType === 2 && response.body !== undefined) {
+                    let json = JSON.parse(response.body);
+                    if(json.valid) {
+                        timesModel.insert(runnerId, raceId, time, function(err, data) {
+                            if (err) {
+                                console.log(err);
+                                res.status(500).json({
+                                    status: 'Server Error',
+                                    data: []
+                                })
+                            } else {
+                                res.status(200).json({
+                                    status: 'OK',
+                                    data: [{
+                                        runnerId: runnerId,
+                                        raceId: raceId,
+                                        time: time
+                                    }]
+                                })
+                            }
+                        })
+                    } else {
+                        res.status(400).json({
+                            status: 'Disqualified runner',
+                            runnerId: runnerId
+                        })
+                    }
+                } else {
+                    res.status(404).json({
+                        status: 'Runner id not found in the check API',
+                        runnerId: runnerId
+                    })
+                }
+            });
+
             res.status(200).json({
                 status: 'OK',
                 data: []

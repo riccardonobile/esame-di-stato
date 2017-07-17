@@ -1,0 +1,13 @@
+INSERT
+INTO
+    times(
+    id,
+    raceId,
+    runnerId,
+    raceTime)
+VALUES(
+    NULL,
+    {raceId},
+    {runnerId},
+    {time}
+)

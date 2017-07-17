@@ -7,7 +7,7 @@ let mysql = require('../services/service.mysql'),
 let db = mysql.getConnection();
 
 let getAll = function(callback) {
-    let query = fs.readFileSync('queries/times/query.getAll.sql').toString();
+    let query = fs.readFileSync('./queries/times/query.getAll.sql').toString();
 
     db.query(query, function (err, rows) {
         callback(err, rows);
@@ -15,7 +15,7 @@ let getAll = function(callback) {
 };
 
 let insert = function(runnerId, raceId, time, callback) {
-    let query = fs.readFileSync('queries/times/query.insert.sql').toString();
+    let query = fs.readFileSync('./queries/times/query.insert.sql').toString();
 
     query = format(query, {
         runnerId: db.escape(runnerId),
