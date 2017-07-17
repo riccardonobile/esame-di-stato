@@ -2,7 +2,7 @@
 
 let unirest = require('unirest');
 
-const checkUrl = 'https://run-check-2017.mvlabs.it/check/';
+const checkUrl = 'https://run-check-2017.mvlabs.it/check';
 
 const schema = {
     'raceId': {
@@ -67,46 +67,43 @@ let insert = function(req, res) {
                 runnerId = req.body.id,
                 time= req.body.time;
 
+            let message = '';
+
             unirest.get(checkUrl + '/' + runnerId).send().end(function (response) {
                 if(response.statusType === 2 && response.body !== undefined) {
                     let json = JSON.parse(response.body);
-                    if(json.valid) {
-                        timesModel.insert(runnerId, raceId, time, function(err, data) {
-                            console.log(err);
-                            if (err) {
-                                console.log(err);
-                                res.status(500).json({
-                                    status: 'Server Error',
-                                    data: []
-                                })
-                            } else {
-                                res.status(200).json({
-                                    status: 'OK',
-                                    data: [{
-                                        runnerId: runnerId,
-                                        raceId: raceId,
-                                        time: time
-                                    }]
-                                })
-                            }
-                        })
+                    if(!json.valid) {
+                        time = null;
+                        message = 'Disqualified runner';
                     } else {
-                        res.status(400).json({
-                            status: 'Disqualified runner',
-                            runnerId: runnerId
-                        })
+                        message = 'Runner time added'
                     }
+                    timesModel.insert(runnerId, raceId, time, function(err, data) {
+                        console.log(err);
+                        if (err) {
+                            console.log(err);
+                            res.status(500).json({
+                                status: 'Server Error',
+                                data: []
+                            })
+                        } else {
+                            res.status(201).json({
+                                status: 'Created',
+                                data: [{
+                                    runnerId: runnerId,
+                                    raceId: raceId,
+                                    time: time
+                                }],
+                                message: message
+                            })
+                        }
+                    });
                 } else {
                     res.status(404).json({
                         status: 'Runner id not found in the check API',
                         runnerId: runnerId
                     })
                 }
-            });
-
-            res.status(200).json({
-                status: 'OK',
-                data: []
             });
         }
     });
