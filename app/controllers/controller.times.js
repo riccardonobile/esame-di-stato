@@ -37,6 +37,7 @@ let timesModel = require('../models/model.times');
 
 let getAll = function(req, res) {
     timesModel.getAll(function(err, data) {
+        console.log(err);
         if (err) {
             res.status(500).json({
                 status: 'Server Error',
@@ -71,6 +72,7 @@ let insert = function(req, res) {
                     let json = JSON.parse(response.body);
                     if(json.valid) {
                         timesModel.insert(runnerId, raceId, time, function(err, data) {
+                            console.log(err);
                             if (err) {
                                 console.log(err);
                                 res.status(500).json({
